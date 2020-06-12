@@ -18,7 +18,9 @@ class MyArray(object):
 	# same as arr[0] = 10; syntactic sugar
 	def set(self, index, value):
 		if index >= self._size:
-			print("invalid index")
+			raise IndexError("index out of range")
+		elif self._size <= 0:
+			raise IndexError("index out of range")
 		else:
 			self._arr[index] = value
 
@@ -39,8 +41,8 @@ class MyArray(object):
 			if self._arr[i] == value:
 				index = i
 				break;
-		if index == -1:
-			print("array is empty nothing to remove")
+		if self._size <= 0:
+			raise ValueError("array.remove(x): x not in array")
 		else:	
 			k = index + 1  
 			while k < self._size:
