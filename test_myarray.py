@@ -1,4 +1,3 @@
- 
 import unittest
 from MyArray import MyArray
 
@@ -68,7 +67,7 @@ class MyArrayTests(unittest.TestCase):
 		myarray = MyArray('i')
 
 		# Act & Assert
-		self.assertRaises(IndexError, myarray.set( 0, 100))
+		self.assertRaises(IndexError, myarray.set, 0, 100)
 
 	def test_set_when_single_element_in_myarray(self):
 		# Arrange
@@ -130,6 +129,7 @@ class MyArrayTests(unittest.TestCase):
 		#Arrange
 		myarray = MyArray('i')
 
+		self.assertEqual(0, myarray.size())
 		# Act
 		myarray.insert(0,100)
 
@@ -137,54 +137,103 @@ class MyArrayTests(unittest.TestCase):
 		self.assertEqual(1, myarray.size())
 		self.assertEqual(100, myarray.get(0))
 
-	def test_insert_when_myarray_is_full(self):
+	def test_insert_when_single_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20)
 
-		myarray = MyArray('i',1,2,3,4)
+		# Act
+		myarray.insert(0, 100)
 
-		self.assertEqual(4, myarray.size())
-		self.assertEqual(4, myarray._capacity)
-		myarray.insert(0,0)
-		self.assertEqual(5, myarray.size())
-		self.assertEqual(8, myarray._capacity)
-
-	def test_insert_is_not_full(self):
-
-		myarray = MyArray('i',1,2,3,4)
-		myarray.append(5)
-		self.assertEqual(5, myarray.size())
-		self.assertEqual(8, myarray._capacity)
-		myarray.insert(5,6)
-		self.assertEqual(6, myarray.size())
-		self.assertEqual(8, myarray._capacity)
-		myarray.insert(6,7)
-		self.assertEqual(7, myarray.size())
-		self.assertEqual(8, myarray._capacity)
-		myarray.insert(7,8)
-		self.assertEqual(8, myarray.size())
-		self.assertEqual(8, myarray._capacity)
-		myarray.insert(8,9)
-		self.assertEqual(9, myarray.size())
-		self.assertEqual(16, myarray._capacity)
-
-	def test_pop_for_last_element(self):
-		myarray = MyArray('i',1,2,3)
-		self.assertEqual(3, myarray.size())
-		self.assertEqual(3, myarray._capacity)
-		myarray.pop()
+		# Assert
 		self.assertEqual(2, myarray.size())
-		self.assertEqual(3, myarray._capacity)
+		self.assertEqual(100, myarray.get(0))
+		self.assertEqual(20, myarray.get(1))
 
-	def test_pop_for_perticular_index(self):
-		myarray = MyArray('i',1,2,3)
+	def test_insert_when_more_than_one_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20, 30)
 
-		myarray.pop(2)
+		# Act
+		myarray.insert(0, 100)
 
-	def test_pop_on_empty_array(self):
-		myarray = MyArray('i')
-		self.assertRaises(IndexError,lambda:myarray.pop(0))
+		# Assert
+		self.assertEqual(3, myarray.size())
+		self.assertEqual(100, myarray.get(0))
+		self.assertEqual(20, myarray.get(1))
+		self.assertEqual(30, myarray.get(2))
 
+	def test_remove_when_empty_myarray(self):
+		# Arrange
+		myarray = MyArray()
+		
+		# Act & Assert
+		self.assertRaises(ValueError, myarray.remove, 100)
 
-	def test_pop_for_an_invalid_index(self):
-		myarray = MyArray('i',1,2,3)
-		self.assertRaises(IndexError,lambda:myarray.pop(3))
+	def test_remove_when_single_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20)
+
+		# Act
+		myarray.remove(20)
+
+		# Assert
+		self.assertEqual(0, myarray.size())
+
+	def test_remove_when_more_than_one_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20, 30)
+
+		# Act
+		myarray.remove(20)
+
+		# Assert
+		self.assertEqual(1, myarray.size())
+		self.assertEqual(30, myarray.get(0))
+
+	def test_pop_when_empty_myarray(self):
+		# Arrange
+		myarray = MyArray()
+		
+		# Act & Assert
+		self.assertRaises(IndexError, myarray.pop, -1)
+
+	def test_pop_when_single_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20)
+
+		# Act
+		myarray.pop()
+
+		# Assert
+		self.assertEqual(0, myarray.size())
+
+	def test_pop_when_more_than_one_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20, 30)
+
+		# Act
+		myarray.pop(0)
+
+		# Assert
+		self.assertEqual(1, myarray.size())
+		self.assertEqual(30, myarray.get(0))
+
+	def test_pop_when_more_than_two_element_in_myarray(self):
+		# Arrange
+		myarray = MyArray('i', 20, 30, 40)
+
+		# Act
+		myarray.pop(1)
+
+		# Assert
+		self.assertEqual(2, myarray.size())
+		self.assertEqual(20, myarray.get(0))
+		self.assertEqual(40, myarray.get(1))
+
+	def test_pop_when_index_out_bounds(self):
+		# Arrange
+		myarray = MyArray('i', 20, 30, 40)
+		
+		# Act & Assert
+		self.assertRaises(IndexError, myarray.pop, 4)
 
